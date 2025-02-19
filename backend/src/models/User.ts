@@ -2,24 +2,27 @@ import { v4 as uuidv4 } from 'uuid';
 
 export interface IUser {
     id: string;
-    username: string;
+    name: string;
     email: string;
     passwordHash?: string;
     createdAt: string;
+    imageUrl?: string;
 }
 
 export class User implements IUser {
     id: string;
-    username: string;
+    createdAt: string;
+    name: string;
     email: string;
     passwordHash: string;
-    createdAt: string;
+    imageUrl?: string;
 
-    constructor(username: string, email: string, passwordHash: string) {
+    constructor(name: string, email: string, passwordHash: string, imageUrl?: string) {
         this.id = uuidv4();
-        this.username = username;
+        this.createdAt = new Date().toISOString();
+        this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.createdAt = new Date().toISOString();
+        this.imageUrl = imageUrl;
     }
 }

@@ -9,8 +9,9 @@ export const getUsers = async (req: Request, res: Response) => {
         res.status(200).json(users.map(user => ({
             id: user.id,
             email: user.email,
-            username: user.username,
-            createdAt: user.createdAt
+            username: user.name,
+            createdAt: user.createdAt,
+            imageUrl: user.imageUrl
         })));
     } catch (error) {
         res.status(500).json({ error: 'Error fetching users', details: error });
