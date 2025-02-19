@@ -1,0 +1,332 @@
+
+openapi: 3.0.3
+info:
+  title: Spaces App API
+  description: API documentation for the Spaces App MVP
+  version: 1.1.0
+
+servers:
+  - url: https://api.spacesapp.com/v1
+    description: Production Server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+paths:
+  /users:
+    post:
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - password
+              properties:
+                username:
+                  type: string
+                  maxLength: 50
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 6
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid request
+
+  /spaces:
+    get:
+      summary: List all spaces
+      operationId: listSpaces
+      parameters:
+        - name: search
+          in: query
+          description: Search spaces by title
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Sorting option
+          schema:
+            type: string
+            enum: [newest, oldest, popular, rich]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of spaces
+  
+    post:
+      summary: Create a new space
+      operationId: createSpace
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+              properties:
+                title:
+                  type: string
+                  maxLength: 100
+                description:
+                  type: string
+                  maxLength: 1000
+                banner_image:
+                  type: string
+                  format: url
+      responses:
+        '201':
+          description: Space created successfully
+        '400':
+          description: Invalid request
+
+  /spaces/{spaceId}:
+    get:
+      summary: Get space details
+      operationId: getSpace
+      parameters:
+        - name: spaceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Space details
+
+  /spaces/{spaceId}/feeds:
+    parameters:
+      - name: spaceId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: List feeds in a space
+      operationId: listFeeds
+      parameters:
+        - name: sort
+          in: query
+          description: Sorting option
+          schema:
+            type: string
+            enum: [newest, oldest, most_commented, most_liked]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of feeds
+
+    post:
+      summary: Create a feed in a space
+      operationId: createFeed
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - body
+              properties:
+                title:
+                  type: string
+                  maxLength: 100
+                body:
+                  type: string
+                  maxLength: 5000
+                image_url:
+                  type: string
+                  format: url
+      responses:
+        '201':
+          description: Feed created successfully
+
+  /feeds/{feedId}:
+    delete:
+      summary: Delete a feed
+      operationId: deleteFeed
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: feedId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Feed deleted successfully
+        '403':
+          description: Forbidden - Only the owner, moderator, or admin can delete
+
+  /feeds/{feedId}/comments:
+    get:
+      summary: List comments on a feed
+      operationId: listComments
+      parameters:
+        - name: feedId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of comments
+
+    post:
+      summary: Add a comment to a feed (supports nesting)
+      operationId: addComment
+      parameters:
+        - name: feedId
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - body
+              properties:
+                body:
+                  type: string
+                  maxLength: 500
+                parent_comment_id:
+                  type: integer
+                  nullable: true
+      responses:
+        '201':
+          description: Comment added successfully
+
+  /comments/{commentId}:
+    delete:
+      summary: Delete a comment
+      operationId: deleteComment
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Comment deleted successfully
+        '403':
+          description: Forbidden - Only the owner, moderator, or admin can delete
+
+  /reactions:
+    post:
+      summary: Add or remove a reaction
+      operationId: react
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - target_type
+                - target_id
+                - reaction_type
+              properties:
+                target_type:
+                  type: string
+                  enum: [feed, comment]
+                target_id:
+                  type: integer
+                reaction_type:
+                  type: string
+                  enum: [Like, Love, Laugh, Wow, Angry, Dislike]
+      responses:
+        '200':
+          description: Reaction added or removed
+
+  /reports:
+    post:
+      summary: Report a feed or comment
+      operationId: reportContent
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - target_type
+                - target_id
+                - reason
+              properties:
+                target_type:
+                  type: string
+                  enum: [feed, comment]
+                target_id:
+                  type: integer
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Content reported successfully
