@@ -5,6 +5,8 @@ services:
     build: ./backend
     ports:
       - "5000:5000"
+    depends_on:
+      - database
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -23,12 +25,11 @@ services:
     env_file:
       - ./frontend/.env
 
-  dynamodb-local:
+  database:
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
     image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb-local
     ports:
       - "8000:8000"
     volumes:
-      - "./docker/dynamodb:/home/dynamodblocal/data"
+      - "./database:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
