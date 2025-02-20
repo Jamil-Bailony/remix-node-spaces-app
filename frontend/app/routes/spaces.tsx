@@ -1,5 +1,5 @@
 import { Link, MetaFunction, useRouteLoaderData } from "@remix-run/react";
-import requestGetSpaces from "~/network/spaces";
+import { requestGetSpaces } from "~/network/spaces";
 import { Space } from "~/types";
 
 export const meta: MetaFunction = () => {
@@ -16,8 +16,6 @@ export async function loader() {
 export default function Spaces() {
     const data = useRouteLoaderData<typeof loader>('routes/spaces');
     const spaces = data?.spaces;
-    console.log('spaces', spaces);
-
 
     return (
         <div className="flex flex-col h-screen">
@@ -43,7 +41,7 @@ function SpaceList({ spaces }: { spaces: Space[] | undefined }) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
             {spaces?.map((space: Space) => (
-                <SpaceCard space={space} />
+                <SpaceCard space={space} key={space.id} />
             ))}
         </div>
     )
@@ -62,7 +60,7 @@ function SpaceCard({ space }: { space: Space }) {
                     alt={space.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
 
             <div className="p-4">

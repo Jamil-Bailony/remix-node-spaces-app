@@ -23,20 +23,19 @@ export const getAllSpaces = async (req: Request, res: Response) => {
     }
 };
 
-export const getSpaceById = async (
-    req: Request,
-    res: Response,
-): Promise<void> => {
+export const getSpace = async (req: Request, res: Response) => {
     try {
         const { spaceId } = req.params;
+
         const space = await spaceService.getSpaceById(spaceId);
+
         if (!space) {
             res.status(404).json({ error: 'Space not found' });
-            return;
         }
 
         res.status(200).json(space);
     } catch (error) {
+        console.error('Error fetching space:', error);
         res.status(500).json({ error: 'Error fetching space details' });
     }
 };

@@ -8,7 +8,8 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+# RUN npm run build
+# we could copy build artifacts to another image and use remix-serve
 
 EXPOSE 3000
 
