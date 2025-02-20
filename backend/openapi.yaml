@@ -184,7 +184,7 @@ paths:
         '201':
           description: Feed created successfully
 
-  /feeds/{feedId}:
+  /spaces/{spaceId}/feeds/{feedId}:
     delete:
       summary: Delete a feed
       operationId: deleteFeed
@@ -202,7 +202,7 @@ paths:
         '403':
           description: Forbidden - Only the owner, moderator, or admin can delete
 
-  /feeds/{feedId}/comments:
+  /spaces/{spaceId}/feeds/{feedId}/comments:
     get:
       summary: List comments on a feed
       operationId: listComments
@@ -256,7 +256,7 @@ paths:
         '201':
           description: Comment added successfully
 
-  /comments/{commentId}:
+  /spaces/{spaceId}/comments/{commentId}:
     delete:
       summary: Delete a comment
       operationId: deleteComment
@@ -273,60 +273,3 @@ paths:
           description: Comment deleted successfully
         '403':
           description: Forbidden - Only the owner, moderator, or admin can delete
-
-  /reactions:
-    post:
-      summary: Add or remove a reaction
-      operationId: react
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - target_type
-                - target_id
-                - reaction_type
-              properties:
-                target_type:
-                  type: string
-                  enum: [feed, comment]
-                target_id:
-                  type: integer
-                reaction_type:
-                  type: string
-                  enum: [Like, Love, Laugh, Wow, Angry, Dislike]
-      responses:
-        '200':
-          description: Reaction added or removed
-
-  /reports:
-    post:
-      summary: Report a feed or comment
-      operationId: reportContent
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - target_type
-                - target_id
-                - reason
-              properties:
-                target_type:
-                  type: string
-                  enum: [feed, comment]
-                target_id:
-                  type: integer
-                reason:
-                  type: string
-      responses:
-        '200':
-          description: Content reported successfully
