@@ -19,13 +19,13 @@ export const getAllSpaces = async (req: Request, res: Response) => {
         const spaces = await spaceService.getAllSpaces();
         res.status(200).json(spaces);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching spaces' });
+        res.status(500).json({ error: 'Error fetching spaces', details: JSON.stringify(error) });
     }
 };
 
 export const getSpaceById = async (
-    req: Request, 
-    res: Response, 
+    req: Request,
+    res: Response,
 ): Promise<void> => {
     try {
         const { spaceId } = req.params;

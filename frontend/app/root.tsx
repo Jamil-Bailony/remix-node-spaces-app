@@ -16,7 +16,7 @@ import type { LinksFunction } from "@remix-run/node";
 import "./styles/tailwind.css";
 import api from "./network/api";
 import AuthenticatedLayout from "./components/Layouts/AuthenticatedLayout";
-import requestGetUser from "./network/requestGetUser";
+import requestGetUser from "./network/users";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,7 +42,7 @@ export async function loader() {
   };
 }
 
-export function Layout({ children }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData<typeof loader>('root');
 
   return (

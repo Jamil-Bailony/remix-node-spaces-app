@@ -1,3 +1,11 @@
+import { MetaFunction } from "@remix-run/react";
+
+export const meta: MetaFunction = () => {
+    return [
+        { title: "Page not found" },
+    ];
+};
+
 export default function NotFound() {
     return (
         <div className="flex flex-col items-center justify-center h-screen">

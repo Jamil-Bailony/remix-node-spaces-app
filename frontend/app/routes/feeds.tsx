@@ -1,3 +1,11 @@
+import { MetaFunction } from "@remix-run/react";
+
+export const meta: MetaFunction = () => {
+    return [
+        { title: "Feeds" },
+    ];
+};
+
 export default function Feeds() {
     return (
         <div className="flex flex-col h-screen">
