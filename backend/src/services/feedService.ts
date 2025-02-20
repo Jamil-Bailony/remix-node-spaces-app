@@ -7,7 +7,6 @@ import { Comment } from '../models/Comment';
 const TABLE_NAME = process.env.TABLE_NAME;
 
 interface FeedWithRelations extends IFeed {
-    comments: Comment[];
     reactions: {
         total: number;
         types: Record<string, number>;
@@ -57,23 +56,7 @@ export const getSpaceFeedsWithRelations = async (
 
     // relations
     const feedsWithRelations = await Promise.all(feeds.map(async (feed) => {
-        const [comments, reactions, author] = await Promise.all([
-            // comments
-            dynamoDB.send(new QueryCommand({
-                TableName: TABLE_NAME,
-                KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
-                FilterExpression: '#type = :type',
-                ExpressionAttributeNames: {
-                    '#type': 'type'
-                },
-                ExpressionAttributeValues: {
-                    ':pk': `SPACE#${spaceId}`,
-                    ':sk': `FEED#${feed.id}#COMMENT#`,
-                    ':type': 'COMMENT'
-                }
-            })),
-
-            // reactions
+        const [reactions, author] = await Promise.all([
             dynamoDB.send(new QueryCommand({
                 TableName: TABLE_NAME,
                 KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
@@ -83,7 +66,6 @@ export const getSpaceFeedsWithRelations = async (
                 }
             })),
 
-            // author details
             dynamoDB.send(new GetCommand({
                 TableName: TABLE_NAME,
                 Key: {
@@ -106,7 +88,6 @@ export const getSpaceFeedsWithRelations = async (
 
         return {
             ...feed,
-            comments: comments.Items as Comment[],
             reactions: {
                 total: reactionItems.length,
                 types: reactionCounts,
@@ -119,21 +100,6 @@ export const getSpaceFeedsWithRelations = async (
     }));
 
     return feedsWithRelations;
-};
-
-export const getUserReactions = async (userId: string) => {
-    const command = new QueryCommand({
-        TableName: TABLE_NAME,
-        IndexName: 'GSI1',
-        KeyConditionExpression: 'GSI1PK = :pk AND begins_with(GSI1SK, :sk)',
-        ExpressionAttributeValues: {
-            ':pk': `USER#${userId}`,
-            ':sk': 'REACTION#'
-        }
-    });
-
-    const response = await dynamoDB.send(command);
-    return response.Items as Reaction[];
 };
 
 export const deleteFeed = async (

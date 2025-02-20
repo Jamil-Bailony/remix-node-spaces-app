@@ -12,7 +12,6 @@ type AuthenticatedLayoutProps = {
 };
 
 export default function AuthenticatedLayout({ children, user }: AuthenticatedLayoutProps) {
-    console.log(user);
     return (
         <div className="flex flex-col h-screen max-h-screen w-screen md:flex-row overflow-hidden">
             <main className="flex-1 overflow-y-auto order-1 md:order-2">

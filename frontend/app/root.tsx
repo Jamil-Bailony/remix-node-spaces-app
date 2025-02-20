@@ -4,17 +4,14 @@ import {
   Meta,
   Navigate,
   Outlet,
-  redirect,
   Scripts,
   ScrollRestoration,
-  useNavigate,
   useRouteError,
   useRouteLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 
 import "./styles/tailwind.css";
-import api from "./network/api";
 import AuthenticatedLayout from "./components/Layouts/AuthenticatedLayout";
 import requestGetUser from "./network/users";
 

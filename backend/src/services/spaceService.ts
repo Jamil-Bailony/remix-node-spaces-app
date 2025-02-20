@@ -93,7 +93,6 @@ interface SpaceWithDetails extends ISpace {
         name: string;
         imageUrl?: string;
     };
-    // latestFeeds: Record<string, any>[];
 }
 export const getSpaceById = async (
     spaceId: string,
@@ -118,7 +117,6 @@ export const getSpaceById = async (
         // userSubscription,
         author
     ] = await Promise.all([
-        // feeds count
         dynamoDB.send(new QueryCommand({
             TableName: TABLE_NAME,
             KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
@@ -145,7 +143,7 @@ export const getSpaceById = async (
             Select: 'COUNT'
         })),
 
-        // // user's subscription details
+        // TODO user's subscription details get the ID
         // currentUserId ? dynamoDB.send(new GetCommand({
         //     TableName: TABLE_NAME,
         //     Key: {
