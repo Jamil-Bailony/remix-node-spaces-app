@@ -1,7 +1,7 @@
 # **Spaces App MVP: User Stories**  
 
 ## **1. Overview**  
-The **Spaces App** is a platform where users can discover, subscribe to, and contribute to different spaces. Users can post feeds, comment, react, and engage with other members. The app includes **role-based permissions**, a **basic reporting system**, and sorting mechanisms for better content discovery.
+The **Spaces App** is a platform where users can discover, subscribe to, and contribute to different spaces. Users can post feeds, comment, react, and engage with other members. The app includes **role-based permissions**, and sorting mechanisms for better content discovery.
 
 ---
 
@@ -151,30 +151,12 @@ The **Spaces App** is a platform where users can discover, subscribe to, and con
 
 ---
 
-## **7 Reporting System**  
-
-### **User Story 7.1 – Report a Feed**  
-**As a user,** I want to report a feed so that inappropriate content is reviewed.  
-
-**Acceptance Criteria:**  
-- Users can report a feed **once per user**.  
-- If a feed gets **5 reports**, it is marked as **"Under Review."**  
-
-**Edge Cases:**  
-- If a user **tries to report their own feed**, prevent it.  
-- If a feed **is already under review**, prevent duplicate reporting.  
-
----
-
 ## **8 User Roles & Permissions**  
 
 **Roles & Permissions:**  
 
 | **Role**       | **Permissions** |
 |---------------|----------------|
-| **Admin**     | Full control over space settings, feeds, comments, reports, and user management. |
-| **Moderator** | Can manage feeds, comments, and review reported content. Cannot change space settings or roles. |
-| **Contributor** | Can post feeds, comment, and interact with content. Cannot manage reports or settings. |
-
-**Edge Cases:**  
-- If an **admin removes a moderator while they are reviewing reports**, update dynamically.
+| **Admin**     | Full control over space settings, feeds, and comments, and user management. |
+| **Moderator** | Can manage feeds, comments, and review content. Cannot change space settings or roles. |
+| **Contributor** | Can post feeds, comment, and interact with content. |

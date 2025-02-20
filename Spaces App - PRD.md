@@ -25,18 +25,16 @@ Each space has **three roles** with different permissions:
 
 | **Role**       | **Permissions** |
 |---------------|----------------|
-| **Admin**     | Full control over space settings, feeds, comments, reports, and user management. |
-| **Moderator** | Can manage feeds, comments, and review reported content. Cannot change space settings or roles. |
-| **Contributor** | Can post feeds, comment, and interact with content. Cannot manage reports or settings. |
+| **Admin**     | Full control over space settings, feeds, comments, and user management. |
+| **Moderator** | Can manage feeds, and comments. Cannot change space settings or roles. |
+| **Contributor** | Can post feeds, comment, and interact with content. |
 
 #### **User Stories:**
 - **Admins** can:
   - Manage space settings (title, banner, description).
   - Assign and remove **moderators/contributors**.
-  - Approve or reject reported content.
   - Delete any feed, comment, or user from the space.
 - **Moderators** can:
-  - Approve or reject **reported feeds**.
   - Delete **feeds or comments** if necessary.
 - **Contributors** can:
   - Post feeds and interact via comments and reactions.
@@ -116,29 +114,5 @@ Each space page consists of **three main tabs**:
   - 😲 Wow
   - 😡 Angry
   - 👎 Dislike
-
----
-
-### **2.8 Basic Reporting System**
-To ensure content moderation, a simple reporting system is implemented.
-
-#### **Reporting Rules:**
-- Users can **report a feed** if they find it inappropriate.
-- If a feed receives **5 or more reports**, it **automatically goes under review**.
-- **Admins and Moderators** can:
-  - **Review reported feeds**.
-  - Decide whether to **keep or delete** them.
-
-#### **User Stories:**
-- Users can **report a feed**.
-- Once a feed is reported **5 times**, its state changes to **"Under Review"**.
-- **Admins & Moderators** can:
-  - See reported feeds.
-  - Approve or delete reported feeds.
-
----
-
-## **5. Conclusion**
-This MVP ensures a **fully functional social space app** with structured roles, content engagement, and basic moderation. Future iterations can enhance personalization, media support, and advanced moderation.
 
 ---
