@@ -51,11 +51,11 @@ export default function CommentItem({ feedId, comment, parentAuthorName, updateC
                             </p>
                         </div>
 
-                        <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
+                        {comment.level < 4 && <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                             <button className="hover:text-blue-600 transition-colors" onClick={() => setShowReplyForm(!showReplyForm)}>
                                 Reply
                             </button>
-                        </div>
+                        </div>}
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@ export default function CommentItem({ feedId, comment, parentAuthorName, updateC
             )}
 
             {/* TODO scroll to the comment box smoothly */}
-            {showReplyForm && (
+            {showReplyForm && comment.level < 4 && (
                 <div
                     className="relative"
                     style={{ marginLeft }}
