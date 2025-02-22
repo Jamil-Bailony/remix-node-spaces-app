@@ -56,7 +56,7 @@ export const getSpaceFeedsWithRelations = async (
 
     // relations
     const feedsWithRelations = await Promise.all(feeds.map(async (feed) => {
-        const [reactions, author] = await Promise.all([
+        const [reactions, author, comments] = await Promise.all([
             dynamoDB.send(new QueryCommand({
                 TableName: TABLE_NAME,
                 KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
@@ -76,6 +76,16 @@ export const getSpaceFeedsWithRelations = async (
                 ExpressionAttributeNames: {
                     '#name': 'name'
                 }
+            })),
+
+            dynamoDB.send(new QueryCommand({
+                TableName: TABLE_NAME,
+                KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
+                ExpressionAttributeValues: {
+                    ':pk': `SPACE#${spaceId}`,
+                    ':sk': `FEED#${feed.id}#COMMENT#`
+                },
+                Select: 'COUNT'
             }))
 
         ]);
@@ -95,6 +105,7 @@ export const getSpaceFeedsWithRelations = async (
                     reactionItems.find(r => r.userId === userId) :
                     undefined
             },
+            commentsCount: comments.Count,
             author: author.Item
         };
     }));

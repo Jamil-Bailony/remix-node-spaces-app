@@ -30,7 +30,6 @@ export const action: ActionFunction = async ({ request, params }) => {
             const body = formData.get('body');
             const parentId = formData.get('parentId');
             const userId = formData.get('userId');
-            console.log('parentId', parentId, body);
 
             if (!userId) {
                 throw new Error('User ID is required for posting a comment');
@@ -48,6 +47,6 @@ export const action: ActionFunction = async ({ request, params }) => {
         }
     } catch (error) {
         console.error('Error handling comment operation:', error);
-        throw new Response('Error processing comment operation', { status: 500 });
+        throw new Response('Error processing comment operation', { status: 401 });
     }
 };

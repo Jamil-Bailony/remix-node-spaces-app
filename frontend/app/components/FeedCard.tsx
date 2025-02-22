@@ -25,6 +25,7 @@ interface FeedCardProps {
             userReaction: undefined | Reaction;
         },
         author: Author;
+        commentsCount: number;
     };
     onReact: (feedId: string, reactionType: ReactionType) => void;
 }
@@ -42,32 +43,33 @@ export default function FeedCard({ feed, onReact }: FeedCardProps) {
     const [showComments, setShowComments] = useState(false);
 
     return (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white">
             <div className="p-4 flex items-center space-x-3">
                 <AuthorCard imageUrl={feed.author?.imageUrl} name={feed.author?.name} role={new Date().toLocaleDateString()} />
             </div>
 
-            <div className="px-4 pb-3">
-                <h2 className="text-xl font-semibold mb-2">
-                    {feed.title}
-                </h2>
-                <p className="text-gray-600">
-                    {feed.body}
-                </p>
-            </div>
+            <div className="flex flex-row max-lg:flex-col flex-1 justify-between gap-2">
+                <div className="px-4 pb-3">
+                    <h2 className="text-xl font-semibold mb-2">
+                        {feed.title}
+                    </h2>
+                    <p className="text-gray-600">
+                        {feed.body}
+                    </p>
+                </div>
 
-            {feed.imageUrl && (
-                <div className="relative w-full max-w-lg mx-auto">
+                {feed.imageUrl && (
                     <img
                         src={feed.imageUrl}
                         alt={feed.title}
-                        className="w-full h-full"
+                        className="w-[150px] max-lg:w-full aspect-square object-cover rounded-lg"
                     />
-                </div>
-            )}
+                )}
+            </div>
 
-            <div className="px-4 py-2 mt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
+            <div className="px-2 py-1 mt-4 border-t border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
                 <div className="flex items-center space-x-2">
+                    <AddReactionAction onReact={onReact} />
                     <div className="flex -space-x-1">
                         {Object.entries(feed.reactions.types)
                             .filter(([_, count]) => count > 0)
@@ -83,20 +85,19 @@ export default function FeedCard({ feed, onReact }: FeedCardProps) {
                     </div>
                     <span>{feed.reactions.total}</span>
                 </div>
-                <button onClick={() => setShowComments(true)}>
-                    {feed.comments?.length} comments
-                </button>
+                <div className="px-2 border-gray-100 flex items-center justify-between gap-4">
+                    <button onClick={() => setShowComments(true)} className="text-sm text-gray-600">
+                        {feed.commentsCount} comments
+                    </button>
+                    <button onClick={() => setShowComments(!showComments)} className="text-sm text-gray-600 flex items-center space-x-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        <span>Add Comment</span>
+                    </button>
+                </div>
             </div>
 
-            <div className="px-4 py-2 border-t border-gray-100 flex items-center justify-between">
-                <AddReactionAction onReact={onReact} />
-                <button onClick={() => setShowComments(!showComments)} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md flex items-center space-x-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                    <span>Comment</span>
-                </button>
-            </div>
             {showComments && <CommentsBox feedId={feed.id} />}
         </div>
     );

@@ -40,11 +40,18 @@ export default function AuthenticatedLayout({ children, user }: AuthenticatedLay
                             <div className="text-xl font-bold">{user.username}</div>
                         </div>
                         <div className="flex items-center justify-center w-full h-10">
-                            <input
-                                type="text"
-                                className="w-11/12 h-10 rounded-lg bg-gray-200 p-2"
-                                placeholder="Search"
-                            />
+                            <div className="relative w-11/12">
+                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="w-full h-10 rounded-lg bg-gray-200 p-2 pl-10"
+                                    placeholder="Search"
+                                />
+                            </div>
                         </div>
                         <SidebarItems />
                     </div>
@@ -96,11 +103,11 @@ function SidebarItems() {
     ]
 
     return (
-        <div className={`flex flex-col max-md:flex-row max-md:items-center max-md:w-full max-md:h-full md:mt-6`}>
+        <div className={`flex flex-col lg:mx-2 max-md:flex-row max-md:items-center max-md:w-full max-md:h-full md:mt-6`}>
             {sidebarItems.map(item => (
                 <Link
                     to={item.link}
-                    className={`flex items-center justify-start gap-2 px-4 w-full h-10 p-2 md:py-7 transition-colors duration-200 ease-in-out max-md:h-full max-md:justify-center max-md:flex-1 ${item.active ? "bg-blue-200 text-blue-700 max-md:border-t-4 border-blue-900 md:border-e-4" : "text-gray-700"
+                    className={`flex lg:rounded-lg items-center justify-start gap-2 px-4 w-full h-10 p-2 md:py-5 transition-colors duration-200 ease-in-out max-md:h-full max-md:justify-center max-md:flex-1 ${item.active ? "bg-[#E8ECFF] text-[#3668FF] max-md:border-t-4 border-[#3668FF] md:border-none" : "text-gray-700"
                         }`}
                     key={item.name}
                 >
