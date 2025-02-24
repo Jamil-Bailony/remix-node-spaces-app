@@ -91,7 +91,7 @@ export const getFeedComments = async (
         ExpressionAttributeValues: {
             ':pk': `SPACE#${spaceId}`,
             ':sk': `FEED#${feedId}#COMMENT#`,
-        }
+        },
     }));
 
     const comments = result.Items as Comment[];
@@ -100,7 +100,12 @@ export const getFeedComments = async (
     const commentMap = new Map<string, CommentWithReplies>();
     const topLevelComments: CommentWithReplies[] = [];
 
-    const commentPromises = comments.map(async comment => {
+    // check a way of using dynamo query for sorting by date
+    const sortedCommentsByDate = comments.sort((a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+
+    const commentPromises = sortedCommentsByDate.map(async comment => {
         const authorData = await dynamoDB.send(new GetCommand({
             TableName: TABLE_NAME,
             ProjectionExpression: 'id, #name, imageUrl',

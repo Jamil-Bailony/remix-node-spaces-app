@@ -4,7 +4,7 @@ import * as commentService from '../services/commentService';
 export const createComment = async (req: Request, res: Response) => {
     try {
         const { spaceId, feedId } = req.params;
-        const { userId: authorId, body, parentId } = req.body;
+        const { authorId, body, parentId } = req.body;
 
         const comment = await commentService.createComment(
             spaceId,

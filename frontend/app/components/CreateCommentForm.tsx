@@ -7,7 +7,6 @@ export default function CreateCommentForm({ feedId, commentId, onChanged }: { fe
     const { space } = useLoaderData<{ space: Space }>();
     const data = useRouteLoaderData<{ user: User }>('root');
     const form = useRef();
-    console.log('fetcher', fetcher);
 
     // TODO check why getting error when adding 4th level comment
     useEffect(() => {
